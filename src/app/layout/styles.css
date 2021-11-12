@@ -1,0 +1,53 @@
+body {
+  background-color: #618358 !important;
+}
+
+.ui.inverted.top.fixed.menu {
+  background: rgb(2,0,36);
+  background: linear-gradient(90deg, rgba(2,0,36,1) 0%, rgba(120, 184, 51) 35%, rgb(153, 190, 113) 100%);
+}
+
+.ui.bottom.attached.segment.active.tab{
+  background-color: #618358 !important;
+  border: none;
+}
+
+.ui.fluid.menu {
+  justify-content: space-evenly;
+}
+
+.stretched.twelve.wide.column {
+  margin: 0;
+  padding: 0;
+}
+
+.mySpan {
+  font-family: 'Lato', sans-serif;
+}
+
+.hide {
+  visibility: hidden;
+}
+
+.homePage {
+  display: flex;
+  align-items: center;
+  background-image: linear-gradient(
+          135deg,
+          rgb(24, 115, 29) 0%,
+          rgb(33, 174, 87) 69%,
+          rgb(32, 172, 102) 89%
+  ) !important;
+  height: 100vh;
+}
+
+
+.homePage h1.ui.header {
+  font-size: 4em;
+  font-weight: normal;
+}
+
+.homePage h2 {
+  font-size: 2em;
+  font-weight: normal;
+}
