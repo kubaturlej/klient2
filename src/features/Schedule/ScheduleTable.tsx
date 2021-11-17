@@ -1,4 +1,5 @@
-import { Icon, Image, Segment, Table } from "semantic-ui-react";
+import { Link } from "react-router-dom";
+import { Header, Icon, Image, Segment, Table } from "semantic-ui-react";
 import { League } from "../../app/models/league";
 
 interface Props {
@@ -30,29 +31,33 @@ const ScheduleTable = ({ leauge }: Props) => {
 
     return (
         <>
-            <Segment>
-                <h2><Image src={leauge.logo} avatar /> {leauge.leagueName}</h2>
-            </Segment>
-            <Table celled inverted selectable>
-                <Table.Header>
-                    <Table.Row>
-                        <Table.HeaderCell width='2'>Time</Table.HeaderCell>
-                        <Table.HeaderCell width='6'>First Team</Table.HeaderCell>
-                        <Table.HeaderCell width='6'>Second Team</Table.HeaderCell>
-                        <Table.HeaderCell textAlign='center'>Score</Table.HeaderCell>
-                    </Table.Row>
-                </Table.Header>
-                <Table.Body>
-                    {leauge.matches.map((match) => (
-                        <Table.Row key={match.id}>
-                            <Table.Cell>{match.time} {isInProgress(match.time) ? <Icon style={{ marginLeft: 10 }} name='circle' color='green' /> : <Icon className='hide' style={{ marginLeft: 10 }} name='circle' color='green' />} </Table.Cell>
-                            <Table.Cell>{match.firstTeam}</Table.Cell>
-                            <Table.Cell>{match.secondTeam}</Table.Cell>
-                            <Table.Cell textAlign='center'>{match.score}</Table.Cell>
-                        </Table.Row>
-                    ))}
-                </Table.Body>
-            </Table>
+            {leauge.matches.length === 0
+                ? <></>
+                : <><Segment>
+                    <Header size='huge' as={Link} to={`/league/${leauge.id}`}><Image src={leauge.logo}  /> {leauge.leagueName}</Header>
+                </Segment>
+
+                    <Table celled inverted selectable>
+                        <Table.Header>
+                            <Table.Row>
+                                <Table.HeaderCell width='2'>Time</Table.HeaderCell>
+                                <Table.HeaderCell width='6'>First Team</Table.HeaderCell>
+                                <Table.HeaderCell width='6'>Second Team</Table.HeaderCell>
+                                <Table.HeaderCell textAlign='center'>Score</Table.HeaderCell>
+                            </Table.Row>
+                        </Table.Header>
+                        <Table.Body>
+                            {leauge.matches.map((match) => (
+                                <Table.Row key={match.id}>
+                                    <Table.Cell>{match.time} {isInProgress(match.time) ? <Icon style={{ marginLeft: 10 }} name='circle' color='green' /> : <Icon className='hide' style={{ marginLeft: 10 }} name='circle' color='green' />} </Table.Cell>
+                                    <Table.Cell>{match.firstTeam}</Table.Cell>
+                                    <Table.Cell>{match.secondTeam}</Table.Cell>
+                                    <Table.Cell textAlign='center'>{match.score}</Table.Cell>
+                                </Table.Row>
+                            ))}
+                        </Table.Body>
+                    </Table></>}
+
         </>
     )
 };

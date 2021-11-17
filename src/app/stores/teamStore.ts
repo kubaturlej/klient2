@@ -20,13 +20,11 @@ export default class TeamStore {
             runInAction(()=>{
                 this.league = league;
             })
-            
             runInAction(()=>{
                 this.league!.teams.sort(this.compareNumbers);
                 this.league!.rounds.sort(this.compareRounds)
             })
             this.setLoadingInitial(false);
-            
         } catch (error) {
             console.log(error);
             this.setLoadingInitial(false);

@@ -28,7 +28,7 @@ const LeagueMainPage = () => {
                 <Segment style={{ background: '#f0e68c' }}>
                     <Grid>
                         <Grid.Column width='2'>
-                            <h1><Image style={{ background: 'white' }} src={league?.logo} bordered size='small' /></h1>
+                            <h1><Image  style={{ background: 'white' }} src={league?.logo} bordered size='small' /></h1>
                         </Grid.Column>
                         <Grid.Column width='6'>
                             <h1>{league?.leagueName}</h1>
@@ -42,7 +42,7 @@ const LeagueMainPage = () => {
                        <LeagueProgessBar leagueProgress={league?.leagueProgress} />
                     </Container>
                 </Segment>
-                <LeagueTabs />
+                <LeagueTabs/>
             </Container>
         </>
     )

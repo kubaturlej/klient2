@@ -1,5 +1,6 @@
 import { observer } from "mobx-react-lite";
-import { Table, Image } from "semantic-ui-react";
+import { Link } from "react-router-dom";
+import { Table, Image, Header } from "semantic-ui-react";
 import { Team } from "../../app/models/team";
 
 interface Props {
@@ -20,12 +21,11 @@ const LeagueTable = ({ teams }: Props) => {
                         <Table.HeaderCell textAlign='center'>Goals</Table.HeaderCell>
                     </Table.Row>
                 </Table.Header>
-
                 <Table.Body>
                 {teams.map((team) => (
-                    <Table.Row key={team.id}>
+                    <Table.Row key={team.id} >
                         <Table.Cell>{team.standing}</Table.Cell>
-                        <Table.Cell><Image src={team.logo} avatar/>{team.teamName}</Table.Cell>
+                        <Table.Cell><Header size='tiny' as={Link} to={`/team/${team.id}`}><Image src={team.logo} avatar/>{team.teamName}</Header></Table.Cell>
                         <Table.Cell>{team.points}</Table.Cell>
                         <Table.Cell>{team.matches}</Table.Cell>
                         <Table.Cell textAlign='center'>{team.goalBalance}</Table.Cell>

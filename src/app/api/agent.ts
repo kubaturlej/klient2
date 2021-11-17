@@ -24,7 +24,7 @@ const sleep = (delay: number) => {
 const getResponseData = <T>(response: AxiosResponse<T>) => response.data
 
 axios.interceptors.response.use(async response => {
-    await sleep(100);
+    await sleep(300);
     return response;
 }, (error: AxiosError) => {
     const { data, status } = error.response!;
