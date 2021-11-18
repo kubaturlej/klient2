@@ -9,7 +9,7 @@ const NotFound = () => {
                 <Header as='h1' inverted>
                     Page not found.
                 </Header>
-                <Button as={Link} to='/' size='huge' inverted >Return to Home Page</Button>
+                <Button as={Link} to='/dashboard' size='huge' inverted >Return to Home Page</Button>
             </Container>
         </Segment>
     )

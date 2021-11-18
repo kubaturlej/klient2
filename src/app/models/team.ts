@@ -1,3 +1,5 @@
+import { Player } from "./player";
+
 export interface Team {
     id:                    number;
     teamName:              string;
@@ -18,4 +20,5 @@ export interface Team {
     cleanSheets:           string;
     avgGoalsPerMacth:      string;
     logo:                  string;
+    players:               Player[];
 }

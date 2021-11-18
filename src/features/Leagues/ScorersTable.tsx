@@ -1,5 +1,6 @@
 import { Flag, Table } from "semantic-ui-react";
 import { Player } from "../../app/models/player";
+import { countries } from "./countries";
 
 interface Props {
     player: Player[];
@@ -7,41 +8,7 @@ interface Props {
 
 const ScorersTable = ({ player }: Props) => {
 
-    const countries = new Map([
-        ["FRA", "france"],
-        ["REU", "france"],
-        ["BRA", "brazil"],
-        ["ENG", "england"],
-        ["POR", "portugal"],
-        ["EGY", "egypt"],
-        ["KOR", "south korea"],
-        ["GER", "germany"],
-        ["ITA", "italy"],
-        ["POL", "poland"],
-        ["SWE", "sweden"],
-        ["NOR", "norway"],
-        ["CRO", "croatia"],
-        ["ESP", "spain"],
-        ["URU", "uruguay"],
-        ["SEN", "senegal"],
-        ["JAM", "jamaica"],
-        ["GAB", "gabon"],
-        ["ARG", "argentina"],
-        ["COL", "colombia"],
-        ["NED", "netherlands"],
-        ["CZE", "czech republic"],
-        ["HUN", "hungary"],
-        ["NGA", "nigeria"],
-        ["BIH", "bosnia"],
-        ["SRB", "serbia"],
-        ["HON", "honduras"],
-        ["SVK", "slovakia"],
-        ["CAN", "canada"],
-        ["TUN", "tunisia"],
-        ["GUI", "guinea"],
-        ["GHA", "ghana"],
-    ]);
- 
+
 
 
     const flagRenderer = (nat: any) => <Flag name={nat} />

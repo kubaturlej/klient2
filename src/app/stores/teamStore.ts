@@ -6,6 +6,9 @@ import { Team } from "../models/team";
 
 export default class TeamStore {
     league: League | undefined = undefined;
+    team: Team | undefined = undefined;
+    leagues: League[] = [];
+    teams: Team[] = [];
     loadingInitial = false;
 
     constructor() {
@@ -13,21 +16,54 @@ export default class TeamStore {
     }
 
     loadLeague = async (id: string) => {
-        this.setLoadingInitial(true);
-        try {
-            const league = await agent.Leagues.getLeague(id);
-
+        const found = this.leagues.find(x => x.id === parseInt(id));
+        if (found) {
             runInAction(()=>{
-                this.league = league;
-            })
-            runInAction(()=>{
+                this.league = found;
                 this.league!.teams.sort(this.compareNumbers);
-                this.league!.rounds.sort(this.compareRounds)
+                this.league!.rounds.sort(this.compareRounds);
             })
-            this.setLoadingInitial(false);
-        } catch (error) {
-            console.log(error);
-            this.setLoadingInitial(false);
+        } else {
+            this.setLoadingInitial(true);
+            try {
+                const league = await agent.Leagues.getLeague(id);
+
+                runInAction(()=>{
+                    this.league = league;
+                    this.league!.teams.sort(this.compareNumbers);
+                    this.league!.rounds.sort(this.compareRounds);
+                })
+
+                this.leagues.push(league);
+                this.setLoadingInitial(false);
+            } catch (error) {
+                console.log(error);
+                this.setLoadingInitial(false);
+            }
+        }
+    }
+
+    loadTeam = async (id: string) => {
+        const found = this.teams.find(x => x.id === parseInt(id));
+        if (found) {
+            runInAction(()=>{
+                this.team = found;
+            })
+        } else {
+            this.setLoadingInitial(true);
+            try {
+                const team = await agent.Teams.getTeam(id);
+                this.teams.push(team);
+
+                runInAction(()=>{
+                    this.team = team;
+                })
+
+                this.setLoadingInitial(false);
+            } catch (error) {
+                console.log(error);
+                this.setLoadingInitial(false);
+            }
         }
     }
 

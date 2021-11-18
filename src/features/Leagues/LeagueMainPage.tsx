@@ -16,6 +16,7 @@ const LeagueMainPage = () => {
 
     useEffect(() => {
         if (id) {
+            window.scrollTo(0, 0);
             teamStore.loadLeague(id);
         }
     }, [id, teamStore])
@@ -25,7 +26,7 @@ const LeagueMainPage = () => {
     return (
         <>
             <Container style={{ marginTop: '7em' }}>
-                <Segment style={{ background: '#f0e68c' }}>
+                <Segment raised style={{ background: '#f0e68c' }}>
                     <Grid>
                         <Grid.Column width='2'>
                             <h1><Image  style={{ background: 'white' }} src={league?.logo} bordered size='small' /></h1>
