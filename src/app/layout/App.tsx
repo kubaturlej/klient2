@@ -13,6 +13,7 @@ import LoginForm from '../../features/Users/LoginForm';
 import LoginModal from '../../features/Users/LoginModal';
 import RegisterModal from '../../features/Users/RegisterModal';
 import TeamMainPage from '../../features/Teams/TeamMainPage';
+import SearchTeamComponent from '../../features/Teams/SearchTeamComponent';
 
 function App() {
 
@@ -39,6 +40,7 @@ function App() {
                 <Route path='/league/:id' component={LeagueMainPage} />
                 <Route path='/team/:id' component={TeamMainPage} />
                 <Route exact path='/dashboard' component={ScheduleMainPage} />
+                <Route path='/searchTeam' component={SearchTeamComponent} />
                 <Route path='/errors' component={TestErrors} />
                 <Route path='/login' component={LoginForm} />
                 <Route component={NotFound} />

@@ -36,6 +36,7 @@ const NavBar = () => {
                         ))}
                     </Dropdown.Menu>
                 </Dropdown>
+                <MenuItem as={NavLink} to='/searchTeam'  >Search team <Icon style={{marginLeft: 10}} name='search'/></MenuItem>
                 <MenuItem position='right'>
                     <Dropdown item text={userStore.user?.nickName} icon='chevron down'>
                         <Dropdown.Menu >

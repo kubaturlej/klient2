@@ -25,6 +25,12 @@ const getResponseData = <T>(response: AxiosResponse<T>) => response.data
 
 axios.interceptors.response.use(async response => {
     await sleep(300);
+    if (response.status === 204) {
+        store.teamStore.notFoundResult = 'Not found anything !';
+    }
+    else {
+        store.teamStore.notFoundResult = '';
+    }
     return response;
 }, (error: AxiosError) => {
     const { data, status } = error.response!;
@@ -65,6 +71,11 @@ const requests = {
             'dateTime': date
         }
     }).then(getResponseData),
+    getTeamByName: <T>(url: string, name: string) => axios.get<T>(url, {
+        headers: {
+            'teamName': name
+        }
+    }).then(getResponseData),
     post: <T>(url: string, body: {}) => axios.post<T>(url, body).then(getResponseData),
 }
 
@@ -85,6 +96,7 @@ const Players = {
 const Teams = {
     getTeamsForLeague: (leagueId: string) => requests.get<Team[]>(`/api/Teams/${leagueId}/league`),
     getTeam: (id: string) => requests.get<Team>(`/api/Teams/${id}`),
+    getTeamByName: (name: string) => requests.getTeamByName<Team[]>(`/api/Teams`, name),
 }
 
 const Users = {

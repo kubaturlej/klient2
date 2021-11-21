@@ -9,7 +9,9 @@ export default class TeamStore {
     team: Team | undefined = undefined;
     leagues: League[] = [];
     teams: Team[] = [];
+    searchResults: Team[] = [];
     loadingInitial = false;
+    notFoundResult: string = '';
 
     constructor() {
         makeAutoObservable(this);
@@ -64,6 +66,23 @@ export default class TeamStore {
                 console.log(error);
                 this.setLoadingInitial(false);
             }
+        }
+    }
+
+    loadSearchResults = async (name: string) => {
+        this.setLoadingInitial(true);
+        this.searchResults = [];
+        try {
+            const teams = await agent.Teams.getTeamByName(name);
+
+            teams.forEach( team => {
+                this.searchResults.push(team);
+            })
+            
+            this.setLoadingInitial(false);
+        } catch (error) {
+            console.log(error);
+            this.setLoadingInitial(false);
         }
     }
 
