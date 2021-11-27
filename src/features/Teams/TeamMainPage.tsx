@@ -25,6 +25,20 @@ const TeamMainPage = () => {
 
         return tokens;
     }
+
+    const toggleFavoriteTeam = () => {
+        teamStore.HandleFavoritesTeams(id);
+    }
+
+    const isFollowed = () => {
+        const result = teamStore.favoritesTeams.find(t => t.id === parseInt(id));
+
+        if (result)
+            return 'Unfollow !';
+
+        return 'Follow !' ;
+    }
+
     const flagRenderer = (nat: any) => <Flag name={nat} />
 
     if (teamStore.loadingInitial || !team) return <LoadingComponent content='App loading ...' />
@@ -55,7 +69,7 @@ const TeamMainPage = () => {
                     </GridRow>
                     <GridRow color='blue'>
                         <Grid.Column>
-                            <Button content={'Follow !'} inverted />
+                            <Button content={isFollowed()} loading={teamStore.loading} inverted onClick={toggleFavoriteTeam} />
                         </Grid.Column>
                         <Grid.Column >
                         </Grid.Column>

@@ -20,5 +20,6 @@ export interface Team {
     cleanSheets:           string;
     avgGoalsPerMacth:      string;
     logo:                  string;
+    isFollowed:            boolean;
     players:               Player[];
 }

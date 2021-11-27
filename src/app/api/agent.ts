@@ -76,6 +76,11 @@ const requests = {
             'teamName': name
         }
     }).then(getResponseData),
+    handleFavoriteTeam: <T>(url: string, teamId: string) => axios.post<T>(url, null, {
+        headers: {
+            'teamId': teamId
+        }
+    }).then(getResponseData),
     post: <T>(url: string, body: {}) => axios.post<T>(url, body).then(getResponseData),
 }
 
@@ -97,6 +102,8 @@ const Teams = {
     getTeamsForLeague: (leagueId: string) => requests.get<Team[]>(`/api/Teams/${leagueId}/league`),
     getTeam: (id: string) => requests.get<Team>(`/api/Teams/${id}`),
     getTeamByName: (name: string) => requests.getTeamByName<Team[]>(`/api/Teams`, name),
+    getFavoriteTeams: () => requests.get<Team[]>(`/api/Teams/favorite`),
+    handleFavoriteTeam: (teamId: string) => requests.handleFavoriteTeam(`/api/Teams/favorite`, teamId),
 }
 
 const Users = {

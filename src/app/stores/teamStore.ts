@@ -10,6 +10,8 @@ export default class TeamStore {
     leagues: League[] = [];
     teams: Team[] = [];
     searchResults: Team[] = [];
+    favoritesTeams: Team[] = [];
+    loading = false;
     loadingInitial = false;
     notFoundResult: string = '';
 
@@ -78,7 +80,7 @@ export default class TeamStore {
             teams.forEach( team => {
                 this.searchResults.push(team);
             })
-            
+
             this.setLoadingInitial(false);
         } catch (error) {
             console.log(error);
@@ -86,8 +88,51 @@ export default class TeamStore {
         }
     }
 
+    loadFavoriteTeams =  async () => {
+        this.setLoadingInitial(true);
+        try {
+            const teams = await agent.Teams.getFavoriteTeams();
+
+            teams.forEach( team => {
+                this.favoritesTeams.push(team);
+            })
+
+            this.setLoadingInitial(false);
+        } catch (error) {
+            console.log(error);
+            this.setLoadingInitial(false);
+        }
+    }
+
+    HandleFavoritesTeams = async (teamId: string) => {
+        this.setLoading(true);
+        try {
+            await agent.Teams.handleFavoriteTeam(teamId);
+            runInAction(()=>{
+                const found = this.teams.find(x => x.id === parseInt(teamId));
+                const favoriteFound = this.favoritesTeams.find(x => x.id === parseInt(teamId));
+                if (favoriteFound) {
+                    this.favoritesTeams = [...this.favoritesTeams.filter(t => t.id !== parseInt(teamId))];
+                }
+                else {
+                    this.favoritesTeams.push(found!);
+                }
+            })
+            this.setLoading(false);
+            console.log(this.favoritesTeams);
+            
+        } catch (error) {
+            console.log(error);
+            this.setLoading(false);
+        }
+    }
+
     setLoadingInitial = (state: boolean) => {
         this.loadingInitial = state;
+    }
+
+    setLoading = (state: boolean) => {
+        this.loading = state;
     }
 
     private compareNumbers = (a: Team, b: Team) => {

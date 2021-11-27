@@ -17,13 +17,14 @@ import SearchTeamComponent from '../../features/Teams/SearchTeamComponent';
 
 function App() {
 
-  const {  serwerItemsStore, userStore } = useStore();
+  const {  serwerItemsStore, userStore, teamStore } = useStore();
 
   useEffect(() => {
     if (serwerItemsStore.JWT) {
-      userStore.getUserAfterAppReload()
+      userStore.getUserAfterAppReload();
+      teamStore.loadFavoriteTeams();
     }
-  }, [serwerItemsStore.JWT, userStore])
+  }, [serwerItemsStore.JWT, userStore, teamStore])
 
   return (
     <>
