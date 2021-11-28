@@ -1,3 +1,4 @@
+import { Match } from "./match";
 import { Player } from "./player";
 
 export interface Team {
@@ -22,4 +23,5 @@ export interface Team {
     logo:                  string;
     isFollowed:            boolean;
     players:               Player[];
+    schedule:              Match[];
 }

@@ -1,14 +1,17 @@
 import { makeAutoObservable, runInAction } from "mobx"
 import agent from "../api/agent";
 import { League } from "../models/league";
+import { Match } from "../models/match";
 import { Team } from "../models/team";
+import { store } from "./store";
 
 export default class LeagueStore {
     leagues: League[] = [];
     loading = false;
     loadingInitial = false;
-    currentDate: Date | null  = null;
+    currentDate: Date | null = null;
     currentDateAsString: string = new Date().toLocaleDateString('en-GB');
+    favoriteMatches = new Map<string, Match>();
 
     constructor() {
         makeAutoObservable(this);
@@ -16,7 +19,7 @@ export default class LeagueStore {
 
     loadLeagues = async () => {
         this.setLoadingInitial(true);
-        runInAction(()=> {
+        runInAction(() => {
             this.leagues = [];
         })
         try {
@@ -25,8 +28,8 @@ export default class LeagueStore {
             leagues.forEach(league => {
                 this.addLeague(league);
             })
-            runInAction(()=> {
-               this.currentDate = new Date();
+            runInAction(() => {
+                this.currentDate = new Date();
             })
             this.setLoadingInitial(false);
         } catch (error) {
@@ -38,11 +41,22 @@ export default class LeagueStore {
     loadLeaguesForSpecificDate = async (daysToAdd: number) => {
         this.setLoadingInitial(true);
         this.changeDate(daysToAdd);
-        runInAction(()=> {
+        runInAction(() => {
             this.leagues = [];
+            this.favoriteMatches = new Map<string, Match>();
         })
         try {
             const leagues = await agent.Leagues.getMatchesForToday(this.currentDateAsString);
+
+            store.teamStore.favoritesTeams.forEach(async (team) => {
+                const result = await agent.Teams.getMatchForSpecificDayAndTeam(team.teamName, this.currentDateAsString);
+                runInAction(()=> {
+                    if(result.length === 1) {
+                        this.favoriteMatches.set(team.teamName, result[0])
+                    }
+                })
+            }
+            )
             leagues.forEach(league => {
                 this.addLeague(league);
             })
@@ -66,7 +80,7 @@ export default class LeagueStore {
     }
 
     changeDate = (dayToAdd: number) => {
-        this.currentDate!.setDate(this.currentDate!.getDate() + dayToAdd); 
+        this.currentDate!.setDate(this.currentDate!.getDate() + dayToAdd);
 
         const dd = this.currentDate!.getDate();
         const mm = this.currentDate!.getMonth() + 1;

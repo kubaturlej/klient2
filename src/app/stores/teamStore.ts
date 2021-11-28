@@ -3,6 +3,7 @@ import agent from "../api/agent";
 import { League } from "../models/league";
 import { Round } from "../models/round";
 import { Team } from "../models/team";
+import { store } from "./store";
 
 export default class TeamStore {
     league: League | undefined = undefined;
@@ -108,19 +109,27 @@ export default class TeamStore {
         this.setLoading(true);
         try {
             await agent.Teams.handleFavoriteTeam(teamId);
-            runInAction(()=>{
+            runInAction(async ()=>{
                 const found = this.teams.find(x => x.id === parseInt(teamId));
                 const favoriteFound = this.favoritesTeams.find(x => x.id === parseInt(teamId));
                 if (favoriteFound) {
                     this.favoritesTeams = [...this.favoritesTeams.filter(t => t.id !== parseInt(teamId))];
+                    store.leagueStore.favoriteMatches.delete(found!.teamName);
                 }
                 else {
                     this.favoritesTeams.push(found!);
+                    const result = await agent.Teams.getMatchForSpecificDayAndTeam(found!.teamName, store.leagueStore.currentDateAsString);
+
+                    runInAction(()=> {
+                        if(result.length === 1) {
+                            store.leagueStore.favoriteMatches.set(found!.teamName, result[0]);
+                        }
+                    })
                 }
             })
             this.setLoading(false);
             console.log(this.favoritesTeams);
-            
+
         } catch (error) {
             console.log(error);
             this.setLoading(false);
@@ -142,6 +151,5 @@ export default class TeamStore {
     private compareRounds = (a: Round, b: Round) => {
         return parseInt(a.roundNumber.split('.')[0]) - parseInt(b.roundNumber.split('.')[0]);
     }
-    
 }
 

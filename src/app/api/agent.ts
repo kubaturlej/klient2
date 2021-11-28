@@ -6,6 +6,7 @@ import { Team } from '../models/team'
 import { history } from '../..';
 import { User, UserLoginFormValues, UserRegisterFormValues } from '../models/user'
 import { store } from '../stores/store'
+import { Match } from '../models/match'
 
 axios.defaults.baseURL = 'http://localhost:5000';
 
@@ -82,6 +83,12 @@ const requests = {
         }
     }).then(getResponseData),
     post: <T>(url: string, body: {}) => axios.post<T>(url, body).then(getResponseData),
+    getMatchForSpecificDayAndTeam: <T>(url: string, name: string, date: string) => axios.get<T>(url, {
+        headers: {
+            'teamName': name,
+            'dateTime': date
+        }
+    }).then(getResponseData),
 }
 
 const Leagues = {
@@ -104,6 +111,7 @@ const Teams = {
     getTeamByName: (name: string) => requests.getTeamByName<Team[]>(`/api/Teams`, name),
     getFavoriteTeams: () => requests.get<Team[]>(`/api/Teams/favorite`),
     handleFavoriteTeam: (teamId: string) => requests.handleFavoriteTeam(`/api/Teams/favorite`, teamId),
+    getMatchForSpecificDayAndTeam: (name: string, date: string) => requests.getMatchForSpecificDayAndTeam<Match[]>(`/api/Teams/match`, name, date),
 }
 
 const Users = {
