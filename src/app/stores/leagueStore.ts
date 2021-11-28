@@ -38,6 +38,18 @@ export default class LeagueStore {
         }
     }
 
+    loadFavMatches = async () => {
+        store.teamStore.favoritesTeams.forEach(async (team) => {
+            const result = await agent.Teams.getMatchForSpecificDayAndTeam(team.teamName, this.currentDateAsString);
+            runInAction(() => {
+                if (result.length === 1) {
+                    this.favoriteMatches.set(team.teamName, result[0])
+                }
+            })
+        }
+        )
+    }
+
     loadLeaguesForSpecificDate = async (daysToAdd: number) => {
         this.setLoadingInitial(true);
         this.changeDate(daysToAdd);
@@ -47,16 +59,6 @@ export default class LeagueStore {
         })
         try {
             const leagues = await agent.Leagues.getMatchesForToday(this.currentDateAsString);
-
-            store.teamStore.favoritesTeams.forEach(async (team) => {
-                const result = await agent.Teams.getMatchForSpecificDayAndTeam(team.teamName, this.currentDateAsString);
-                runInAction(()=> {
-                    if(result.length === 1) {
-                        this.favoriteMatches.set(team.teamName, result[0])
-                    }
-                })
-            }
-            )
             leagues.forEach(league => {
                 this.addLeague(league);
             })

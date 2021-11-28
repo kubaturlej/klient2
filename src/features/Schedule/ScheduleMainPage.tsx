@@ -11,6 +11,7 @@ const ScheduleMainPage = () => {
 
     const getDataForNewDay = (daysToAdd: number) => {
         leagueStore.loadLeaguesForSpecificDate(daysToAdd);
+        leagueStore.loadFavMatches();
     }
 
     const areThereMatchesForTodays = () => {
