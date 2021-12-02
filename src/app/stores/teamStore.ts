@@ -5,6 +5,11 @@ import { Round } from "../models/round";
 import { Team } from "../models/team";
 import { store } from "./store";
 
+interface Body {
+    name: string;
+    date: string;
+}
+
 export default class TeamStore {
     league: League | undefined = undefined;
     team: Team | undefined = undefined;
@@ -23,7 +28,7 @@ export default class TeamStore {
     loadLeague = async (id: string) => {
         const found = this.leagues.find(x => x.id === parseInt(id));
         if (found) {
-            runInAction(()=>{
+            runInAction(() => {
                 this.league = found;
                 this.league!.teams.sort(this.compareNumbers);
                 this.league!.rounds.sort(this.compareRounds);
@@ -33,7 +38,7 @@ export default class TeamStore {
             try {
                 const league = await agent.Leagues.getLeague(id);
 
-                runInAction(()=>{
+                runInAction(() => {
                     this.league = league;
                     this.league!.teams.sort(this.compareNumbers);
                     this.league!.rounds.sort(this.compareRounds);
@@ -51,7 +56,7 @@ export default class TeamStore {
     loadTeam = async (id: string) => {
         const found = this.teams.find(x => x.id === parseInt(id));
         if (found) {
-            runInAction(()=>{
+            runInAction(() => {
                 this.team = found;
             })
         } else {
@@ -60,7 +65,7 @@ export default class TeamStore {
                 const team = await agent.Teams.getTeam(id);
                 this.teams.push(team);
 
-                runInAction(()=>{
+                runInAction(() => {
                     this.team = team;
                 })
 
@@ -78,7 +83,7 @@ export default class TeamStore {
         try {
             const teams = await agent.Teams.getTeamByName(name);
 
-            teams.forEach( team => {
+            teams.forEach(team => {
                 this.searchResults.push(team);
             })
 
@@ -89,12 +94,12 @@ export default class TeamStore {
         }
     }
 
-    loadFavoriteTeams =  async () => {
+    loadFavoriteTeams = async () => {
         this.setLoadingInitial(true);
         try {
             const teams = await agent.Teams.getFavoriteTeams();
 
-            teams.forEach( team => {
+            teams.forEach(team => {
                 this.favoritesTeams.push(team);
             })
 
@@ -109,7 +114,7 @@ export default class TeamStore {
         this.setLoading(true);
         try {
             await agent.Teams.handleFavoriteTeam(teamId);
-            runInAction(async ()=>{
+            runInAction(async () => {
                 const found = this.teams.find(x => x.id === parseInt(teamId));
                 const favoriteFound = this.favoritesTeams.find(x => x.id === parseInt(teamId));
                 if (favoriteFound) {
@@ -118,10 +123,11 @@ export default class TeamStore {
                 }
                 else {
                     this.favoritesTeams.push(found!);
-                    const result = await agent.Teams.getMatchForSpecificDayAndTeam(found!.teamName, store.leagueStore.currentDateAsString);
+                    const body: Body = { name: found!.teamName, date: store.leagueStore.currentDateAsString };
+                    const result = await agent.Teams.getMatchForSpecificDayAndTeam(body);
 
-                    runInAction(()=> {
-                        if(result.length === 1) {
+                    runInAction(() => {
+                        if (result.length === 1) {
                             store.leagueStore.favoriteMatches.set(found!.teamName, result[0]);
                         }
                     })

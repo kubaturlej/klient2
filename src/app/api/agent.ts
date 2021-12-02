@@ -55,7 +55,7 @@ axios.interceptors.response.use(async response => {
             history.push('/notfound');
             break;
         case 500:
-            console.log('500');
+            history.push('/servererror');
             break;
 
         default:
@@ -83,12 +83,7 @@ const requests = {
         }
     }).then(getResponseData),
     post: <T>(url: string, body: {}) => axios.post<T>(url, body).then(getResponseData),
-    getMatchForSpecificDayAndTeam: <T>(url: string, name: string, date: string) => axios.get<T>(url, {
-        headers: {
-            'teamName': name,
-            'dateTime': date
-        }
-    }).then(getResponseData),
+    getMatchForSpecificDayAndTeam: <T>(url: string, body: {}) => axios.post<T>(url, body).then(getResponseData),
 }
 
 const Leagues = {
@@ -111,7 +106,7 @@ const Teams = {
     getTeamByName: (name: string) => requests.getTeamByName<Team[]>(`/api/Teams`, name),
     getFavoriteTeams: () => requests.get<Team[]>(`/api/Teams/favorite`),
     handleFavoriteTeam: (teamId: string) => requests.handleFavoriteTeam(`/api/Teams/favorite`, teamId),
-    getMatchForSpecificDayAndTeam: (name: string, date: string) => requests.getMatchForSpecificDayAndTeam<Match[]>(`/api/Teams/match`, name, date),
+    getMatchForSpecificDayAndTeam: (body: {}) => requests.getMatchForSpecificDayAndTeam<Match[]>(`/api/Teams/match`, body),
 }
 
 const Users = {

@@ -5,6 +5,11 @@ import { Match } from "../models/match";
 import { Team } from "../models/team";
 import { store } from "./store";
 
+
+interface Body {
+    name: string;
+    date: string;
+}
 export default class LeagueStore {
     leagues: League[] = [];
     loading = false;
@@ -12,6 +17,7 @@ export default class LeagueStore {
     currentDate: Date | null = null;
     currentDateAsString: string = new Date().toLocaleDateString('en-GB');
     favoriteMatches = new Map<string, Match>();
+
 
     constructor() {
         makeAutoObservable(this);
@@ -39,8 +45,13 @@ export default class LeagueStore {
     }
 
     loadFavMatches = async () => {
+        runInAction(() => {
+            this.favoriteMatches = new Map<string, Match>();
+        })
         store.teamStore.favoritesTeams.forEach(async (team) => {
-            const result = await agent.Teams.getMatchForSpecificDayAndTeam(team.teamName, this.currentDateAsString);
+            const body: Body = {name: team.teamName, date: this.currentDateAsString};
+            const result = await agent.Teams.getMatchForSpecificDayAndTeam(body);
+
             runInAction(() => {
                 if (result.length === 1) {
                     this.favoriteMatches.set(team.teamName, result[0])
@@ -55,7 +66,6 @@ export default class LeagueStore {
         this.changeDate(daysToAdd);
         runInAction(() => {
             this.leagues = [];
-            this.favoriteMatches = new Map<string, Match>();
         })
         try {
             const leagues = await agent.Leagues.getMatchesForToday(this.currentDateAsString);

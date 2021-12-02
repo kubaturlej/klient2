@@ -44,7 +44,7 @@ const ScheduleTable = ({ leauge }: Props) => {
                 <Table celled inverted selectable >
                     <Table.Header>
                         <Table.Row>
-                            <Table.HeaderCell width='3'>Date</Table.HeaderCell>
+                            <Table.HeaderCell width='2'>Date</Table.HeaderCell>
                             <Table.HeaderCell width='6'>Home</Table.HeaderCell>
                             <Table.HeaderCell width='6'>Away</Table.HeaderCell>
                             <Table.HeaderCell textAlign='center'>Score</Table.HeaderCell>

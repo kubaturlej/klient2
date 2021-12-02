@@ -5,12 +5,13 @@ import { Container, Dropdown, DropdownItem, Flag, Icon, Menu, MenuItem } from "s
 import { useStore } from "../stores/store";
 
 const NavBar = () => {
-    const { userStore, leagueStore } = useStore();
+    const { userStore, leagueStore, teamStore } = useStore();
     const { leagues } = leagueStore;
 
     useEffect(() => {
         leagueStore.loadLeagues();
-    }, [leagueStore]);
+        teamStore.loadFavoriteTeams();
+    }, [leagueStore, teamStore]);
 
     const countries = [
         { name: 'england' },
@@ -40,7 +41,7 @@ const NavBar = () => {
                 <MenuItem position='right'>
                     <Dropdown item text={userStore.user?.nickName} icon='chevron down'>
                         <Dropdown.Menu >
-                            <DropdownItem text='Profile' icon='user circle' />
+                            <DropdownItem as={NavLink} to='/profile' text='Profile' icon='user circle' />
                             <DropdownItem onClick={userStore.logout} text='Logout' icon='sign-out' />
                         </Dropdown.Menu>
                     </Dropdown>
