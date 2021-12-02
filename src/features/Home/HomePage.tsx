@@ -9,7 +9,7 @@ const HomePage = () => {
     const { userStore, modalStore } = useStore()
     return (
         <>
-            <Segment inverted textAlign='center' vertical className='homePage' >
+            <Segment loading={userStore.loadingInitial} inverted textAlign='center' vertical className='homePage' >
                 <Container text>
                     <Header as='h1' inverted>
                         <Icon name='heart' />

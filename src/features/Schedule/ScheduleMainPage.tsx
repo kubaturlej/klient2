@@ -1,6 +1,7 @@
 import { observer } from "mobx-react-lite";
 import { Grid, GridColumn, Header, List, Icon, Button, Segment } from "semantic-ui-react";
 import { useStore } from "../../app/stores/store";
+import FavoriteTable from "./FavoriteTable";
 import ScheduleTable from "./ScheduleTable";
 
 
@@ -10,8 +11,8 @@ const ScheduleMainPage = () => {
     const { leagues } = leagueStore;
 
     const getDataForNewDay = (daysToAdd: number) => {
-        leagueStore.loadLeaguesForSpecificDate(daysToAdd);
-        leagueStore.loadFavMatches();
+         leagueStore.loadLeaguesForSpecificDate(daysToAdd);
+         leagueStore.loadFavMatches();
     }
 
     const areThereMatchesForTodays = () => {
@@ -43,6 +44,7 @@ const ScheduleMainPage = () => {
                 <Segment style={{ background: '#C2B280' }}>
                     <Grid>
                         <GridColumn width='15'>
+                            <FavoriteTable/>
                             {areThereMatchesForTodays()
                                 ?
                                 <List>

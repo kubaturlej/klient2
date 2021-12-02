@@ -6,6 +6,8 @@ import { history } from '../..';
 
 export default class UserStore {
     user: User | null = null;
+    loadingInitial = false;
+
     constructor() {
         makeAutoObservable(this);
     }
@@ -28,6 +30,10 @@ export default class UserStore {
         }
     }
 
+    setLoadingInitial = (state: boolean) => {
+        this.loadingInitial = state;
+    }
+
     logout = async () => {
         store.serwerItemsStore.setJWT(null);
         window.localStorage.removeItem('jwt');
@@ -36,12 +42,15 @@ export default class UserStore {
     }
 
     getUserAfterAppReload = async () => {
+        this.setLoadingInitial(true);
         try {
             const user = await agent.Users.getUserAfterReload();
             runInAction(() => {
                 this.user = user;
             })
+            this.setLoadingInitial(false);
         } catch (error) {
+            this.setLoadingInitial(false);
             console.log(error);
         }
     }
